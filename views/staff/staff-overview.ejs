@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title> Eumar Rice Mill</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #2c3e50;
+      background-color: #f5f6f7;
+      overflow: hidden;
+    }
+    .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 100vh;
+  background-color: #0b6514; 
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 40px 25px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+.sidebar h2 i {
+  margin-right: 10px;
+  font-size: 1.4rem;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background-color: #34a853;
+}
+
+.sidebar a:last-child {
+  margin-top: auto;
+}
+
+    .main-content {
+      margin-left: 220px;
+      width: calc(100vw - 220px);
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-areas:
+        "inventory clock"
+        "queue total"
+        "queue orders";
+      gap: 15px;
+      padding: 15px;
+      box-sizing: border-box;
+      background: #2c2b36;
+    }
+
+    .card-box {
+      background: #4944594e;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-box h2 {
+      font-weight: 700;
+      margin-bottom: 10px;
+      border-left: 5px solid #27ae60;
+      padding-left: 10px;
+    }
+
+    .inventory { grid-area: inventory; }
+    .queue-status { grid-area: queue; }
+    .total-sales { grid-area: total; }
+    .orders { grid-area: orders; }
+    
+.clock-box {
+  grid-area: clock;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;     
+  color: #2c3e50;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+    #clock {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #27ae60;
+    }
+
+    #date {
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .modal-backdrop.show { z-index: 1055 !important; }
+    .modal { z-index: 1060 !important; }
+  </style>
+</head>
+<body>
+
+  <nav class="sidebar">
+  <h2><i class="bi bi-person-badge-fill"></i> Staff Panel</h2>
+
+  <a href="/staff-overview" class="active">
+    <i class="bi bi-speedometer2"></i> Overview
+  </a>
+
+  <a href="/queue">
+    <i class="bi bi-people-fill"></i> Queue
+  </a>
+
+  <a href="/sales">
+    <i class="bi bi-bar-chart-line-fill"></i> Sales
+  </a>
+
+  <a href="/staff-inventory">
+    <i class="bi bi-box-seam-fill"></i> Inventory
+  </a>
+
+  <a href="/logout">
+    <i class="bi bi-box-arrow-right"></i> Logout
+  </a>
+</nav>
+
+
+
+  <div class="main-content">
+    <div class="inventory card-box">
+      <h2>Inventory</h2>
+      
+     <% if (outOfStockItems && outOfStockItems.length) { %>
+      <button class="btn btn-danger fw-bold" data-bs-toggle="modal" data-bs-target="#outOfStockModal">
+        OUT OF STOCK (<%= outOfStockItems.length %>)
+      </button>
+    <% } else { %>
+      <p>No out-of-stock items.</p>
+    <% } %>
+
+    </div>
+
+    <div class="clock-box card-box">
+      <div id="clock"></div>
+      <div id="date"></div>
+    </div>
+
+    <div class="queue-status card-box">
+      <h2>Queue Status</h2>
+      <p><strong>Active Customers:</strong> <%= activeCustomers %></p>
+      <p><strong>Currently Serving:</strong> <%= currentlyServing %></p>
+      <p><strong>Waiting in Queue:</strong> <%= inQueue %></p>
+      <% if (nextInQueue) { %>
+        <p><strong>Next in Queue:</strong> <%= nextInQueue %></p>
+      <% } else { %>
+        <p><em>No customers waiting</em></p>
+      <% } %>
+    </div>
+
+    <div class="total-sales card-box">
+      <h2>Total Sales</h2>
+      <p style="font-size: 2rem; font-weight: 700;">₱ <%= typeof totalRevenue === 'number' ? totalRevenue.toFixed(2) : '0.00' %></p>
+      <p><strong>Transactions:</strong> <%= totalSalesCount %></p>
+    </div>
+
+    <div class="orders card-box">
+      <h2>Orders</h2>
+      <p><strong>Pending:</strong> <%= pendingOrders %></p>
+      <p><strong>Completed:</strong> <%= completedOrders %></p>
+    </div>
+  </div>
+
+<div class="modal fade" id="outOfStockModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 12px;">
+
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title fw-bold">Out of Stock Items</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body p-4" style="max-height: 60vh; overflow-y: auto;">
+        <table class="table table-striped table-hover align-middle">
+          <thead class="table-danger">
+            <tr>
+              <th>Item Name</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% outOfStockItems.forEach(item => { %>
+              <tr>
+                <td><%= item.item_name %></td>
+                <td><span class="badge bg-danger">OUT OF STOCK</span></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function updateClockAndDate() {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      document.getElementById('date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateClockAndDate, 1000);
+    updateClockAndDate();
+  </script>
+</body>
+</html>

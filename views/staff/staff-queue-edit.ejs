@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Queue Item</title>
+  <style>
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #f9fbfd;
+    }
+    form {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 1.5rem;
+      background-color: #27ae60;
+      color: white;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #219150;
+    }
+  </style>
+</head>
+<body>
+  <h1>Edit Queue Item #<%= queueItem.queue_id %></h1>
+<form action="/queue/<%= queueItem.queue_id %>/edit" method="POST">
+    <label for="customer_name">Customer Name</label>
+    <input type="text" id="customer_name" name="customer_name" required value="<%= queueItem.customer_name %>" />
+
+   <select id="service_type" name="service_type" required>
+  <option value="milling" <%= queueItem.service_type === 'milling' ? 'selected' : '' %>>Milling</option>
+  <option value="weighing" <%= queueItem.service_type === 'weighing' ? 'selected' : '' %>>Weighing</option>
+  <option value="purchasing" <%= queueItem.service_type === 'purchasing' ? 'selected' : '' %>>Purchasing</option>
+  <option value="scheduling" <%= queueItem.service_type === 'scheduling' ? 'selected' : '' %>>Scheduling</option>
+</select>
+
+
+    <label for="status">Status</label>
+    <select id="status" name="status" required>
+      <option value="waiting" <%= queueItem.status === 'waiting' ? 'selected' : '' %>>Waiting</option>
+      <option value="serving" <%= queueItem.status === 'serving' ? 'selected' : '' %>>Serving</option>
+      <option value="done" <%= queueItem.status === 'done' ? 'selected' : '' %>>Done</option>
+      <option value="rejected" <%= queueItem.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+    </select>
+
+    <label for="queue_number">Queue Number</label>
+    <input type="number" id="queue_number" name="queue_number" required value="<%= queueItem.queue_number %>" />
+
+    <button type="submit">Save Changes</button>
+  </form>
+</body>
+</html>

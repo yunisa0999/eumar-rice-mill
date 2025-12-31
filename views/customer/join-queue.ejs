@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eumar Rice Mill</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0 auto;
+  padding-top: 60px;
+  color: #34495e;
+  max-width: 1200px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url('rice-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  filter: blur(3px) brightness(0.85);
+  z-index: -1;
+  will-change: transform;
+}
+
+body {
+  background: none;
+}
+
+    .side-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+    }
+
+    .side-nav ul li {
+      margin: 12px 0;
+      text-align: center;
+      
+    }
+
+    .side-nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: block;
+      padding: 12px 0;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .side-nav ul li a:hover,
+    .side-nav ul li a:focus {
+      background-color: #27ae60;
+      box-shadow: 0 0 10px #27ae60;
+      outline: none;
+    }
+
+
+    .main-content {
+      margin-left: 100px;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+    }
+    .main-content section {
+      width: 100%;
+      max-width: 480px;
+      height: 600px; 
+      background: rgba(245, 245, 245, 0.85);
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+      position: relative;
+      overflow-y: auto; 
+      box-sizing: border-box;
+    }
+    .main-content h2 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+    form label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    form input,
+    form select,
+    form textarea {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 6px;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      font-size: 0.95rem;
+      background-color: #fff;
+      transition: border 0.3s ease;
+    }
+    form input:focus,
+    form select:focus,
+    form textarea:focus {
+      border-color: #2ecc71;
+      outline: none;
+    }
+    form button[type="submit"] {
+      margin-top: 20px;
+      background-color: red;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+    form button[type="submit"]:hover {
+       box-shadow: 0 0 30px #d10000, 0 0 60px #04a9d6;
+      transform: scale(1.05);
+    }
+    .form-guide {
+      margin-top: 35px;
+      background-color: #f4fbf7;
+      padding: 16px;
+      border-left: 4px solid #2ecc71;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #2f3e46;
+    }
+    .form-guide h3 {
+      margin-top: 0;
+      font-size: 1.1rem;
+    }
+    .form-guide ul {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+      .side-nav {
+        position: relative;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        box-shadow: none;
+      }
+      .side-nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+      .side-nav ul li {
+        margin: 10px;
+      }
+      header {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+ 
+
+
+<main class="main-content">
+  <section id="join">
+    <h2>Join Queue</h2>
+    <form id="serviceForm" action="/place-order" method="POST">
+      <label for="serviceType">Select Service Type:</label>
+      <select name="serviceType" id="serviceType" required>
+        <option value="" disabled selected>-- Choose a service --</option>
+        <option value="milling">Milling</option>
+        <option value="purchasing">Purchasing</option>
+        <option value="otherinquiries">Other Inquiries</option>
+      
+      </select>
+
+      <div id="formFields"></div>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div class="form-guide">
+      <h3>How to Join the Queue</h3>
+      <ul>
+        <li>Select the service you need.</li>
+        <li>Fill out the required information.</li>
+        <li>Submit the form and wait for confirmation.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<script>
+const serviceForm = document.getElementById('serviceForm');
+const serviceType = document.getElementById('serviceType');
+const formFields = document.getElementById('formFields');
+
+serviceType.addEventListener('change', async () => {
+  let html = '';
+
+if (serviceType.value === 'milling') {
+  html = `
+    <label for="name">Name:</label>
+    <input type="text" name="name" required />
+  `;
+  formFields.innerHTML = html;
+
+
+  } else if (serviceType.value === 'purchasing') {
+    let productsOptions = '<option value="" disabled selected>Select product</option>';
+
+    try {
+      const response = await fetch('/api/products');  
+      if (!response.ok) throw new Error('Network response was not ok');
+      const products = await response.json();
+
+      products.forEach(product => {
+        productsOptions += `<option value="${product.id}" data-price="${product.unit_price}">${product.name}</option>`;
+      });
+    } catch (error) {
+      productsOptions = '<option disabled>Failed to load products</option>';
+      console.error('Error fetching products:', error);
+    }
+
+    html = `
+      <label for="name">Name:</label>
+      <input type="text" name="name" required />
+
+      <label for="product">Product to Purchase:</label>
+      <select name="product" id="productSelect" required>
+        ${productsOptions}
+      </select>
+
+      <label for="quantity">Quantity (sacks):</label>
+      <input type="number" name="quantity" id="quantityInput" min="1" value="1" required />
+
+      <label for="amount">Total Amount (₱):</label>
+      <input type="number" name="amount" id="amountInput" min="0" step="0.01" readonly required />
+
+      <label for="notes">Notes (optional):</label>
+      <textarea name="notes" rows="3" placeholder="Special instructions..."></textarea>
+    `;
+    formFields.innerHTML = html;
+
+    const productSelect = document.getElementById('productSelect');
+    const quantityInput = document.getElementById('quantityInput');
+    const amountInput = document.getElementById('amountInput');
+
+    function calculateAmount() {
+      const selectedOption = productSelect.options[productSelect.selectedIndex];
+      const price = parseFloat(selectedOption?.dataset.price) || 0;
+      const quantity = parseFloat(quantityInput.value) || 0;
+      amountInput.value = (price * quantity).toFixed(2);
+    }
+
+    productSelect.addEventListener('change', calculateAmount);
+    quantityInput.addEventListener('input', calculateAmount);
+    calculateAmount();
+
+  } else if (serviceType.value === 'otherinquiries') {
+     html = `
+      <label for="name">Name:</label>
+      <input type="text" name="name" required />
+
+      <label for="contact_number">Contact Number:</label>
+      <input type="text" name="contact_number" required pattern="^[0-9+\\-\\s]{7,15}$" placeholder="e.g. 09123456789" />
+
+      <label for="service_requested">Inquiry Subject:</label>
+      <input type="text" name="service_requested" placeholder="e.g. Delivery schedule, milling rate, etc." required />
+
+      <label for="notes">Message / Inquiry Details:</label>
+      <textarea name="notes" rows="4" placeholder="Enter your inquiry here..." required></textarea>
+    `;
+    formFields.innerHTML = html;
+  }
+});
+
+serviceForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(serviceForm);
+  const data = {};
+
+  formData.forEach((value, key) => {
+    data[key] = value.trim();
+  });
+
+  if (data.weight) data.weight = Number(data.weight);
+  if (data.quantity) data.quantity = Number(data.quantity);
+  if (data.amount) data.amount = Number(data.amount);
+
+  try {
+    const response = await fetch('/place-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    const html = await response.text();
+    document.querySelector('.main-content').innerHTML = html;
+
+  } catch (error) {
+    alert('Failed to submit order. Please try again.');
+    console.error('Submit error:', error);
+  }
+});
+</script>
+
+</body>
+</html>

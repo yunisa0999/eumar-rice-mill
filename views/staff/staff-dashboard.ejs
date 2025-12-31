@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eumar Rice Mill</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #2c3e50;
+      background-color: #f5f6f7;
+      overflow: hidden;
+    }
+    .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 100vh;
+  background-color: #0b6514; 
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 40px 25px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+.sidebar h2 i {
+  margin-right: 10px;
+  font-size: 1.4rem;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+ .sidebar a:hover,
+.sidebar a.active {
+  background-color: #34a853; 
+}
+
+.sidebar a:last-child {
+  margin-top: auto;
+}
+    .top-nav a {
+      padding: 8px 12px;
+      font-weight: 600;
+      color: #171515;
+      text-decoration: none;
+      border-radius: 0;
+      background-color: transparent;
+      box-shadow: none;
+      border: none;
+      transition: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .top-nav a.active {
+      color: #27ae60;
+      font-weight: 700;
+      text-decoration: underline;
+      box-shadow: none;
+    }
+
+    .top-nav a:hover:not(.active) {
+      color: #ffd700;
+      background-color: transparent;
+      cursor: pointer;
+      box-shadow: none;
+      border: none;
+    }
+
+    .top-nav {
+  position: fixed;      
+  top: 0;
+  left: 230px;          
+  width: calc(100% - 230px);
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-bottom: 1px solid #ccc;
+  z-index: 100;          
+}
+
+.header-row {
+  position: fixed;      
+  top: 50px;             
+  left: 230px;
+  width: calc(100% - 230px);
+  height: 100px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  z-index: 99;           
+  padding: 0 20px;
+}
+
+.main-content {
+  position: absolute;
+  top: 150px;           
+  left: 230px;
+  right: 0;
+  bottom: 0;
+  background: #e0e8ef;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+}
+
+
+
+
+.clock-calendar {
+  background-color: #ffffff;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: right;
+}
+
+    h1 {
+      font-weight: 700;
+      color: #34495e;
+      margin: 0 0 25px;
+      border-left: 6px solid #27ae60;
+      padding-left: 18px;
+      letter-spacing: 0.7px;
+      user-select: none;
+      background: #ecf0f1;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-radius: 8px;
+      display: inline-block;
+      transition: color 0.3s ease;
+    }
+    h1:hover, h2:hover {
+      color: #2ecc71;
+      cursor: default;
+    }
+
+   
+    .header-row h1 {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #3B3552;
+      margin: 0;
+      padding-left: 18px;
+      border-left: 6px solid #27ae60;
+      background: #ecf0f1;
+      border-radius: 8px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      letter-spacing: 0.7px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+      user-select: none;
+      display: inline-block;
+    }
+
+    .status {
+      padding: 7px 18px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: capitalize;
+      display: inline-block;
+      user-select: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      letter-spacing: 0.05em;
+    }
+td.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;  
+}
+
+.action-btn {
+  padding: 10px 16px;
+  font-weight: 700;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  user-select: none;
+  min-width: 90px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.approve-btn {
+  background-color: #3498db;
+}
+
+.cancel-btn {
+  background-color: #e74c3c; 
+  color: #fff;
+}
+
+.done-btn {
+  background-color: #2980b9;
+  box-shadow: 0 0 8px rgba(41, 128, 185, 0.6);
+  font-weight: 800;
+  color: #fff;
+}
+
+ .action-btn:hover {
+  background-color: #f1c40f !important;
+  color: #2c3e50 !important;
+  box-shadow: 0 0 12px #f1c40f;
+}
+
+ .waiting {
+  background-color: #fff8d6;
+  color: #c28c00;
+  border: 1px solid #c28c00;
+}
+
+.serving {
+  background-color: #d4f4dd;
+  color: #2b7a3f;
+  border: 1px solid #2b7a3f;
+}
+
+.cancelled {
+  background-color: #ffffff;  
+  color: #e74c3c;            
+  border: 1px solid #e74c3c;
+}
+    .header-row h1 {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #27ae60;
+      margin: 0;
+      padding-left: 18px;
+      border-left: 6px solid #27ae60;
+      background: #ecf0f1;
+      border-radius: 8px;
+      padding-top: 5px;
+      padding-bottom: 8px;
+      letter-spacing: 0.7px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+      user-select: none;
+      display: inline-block;
+    }
+
+    .clock-calendar {
+  background-color: transparent;
+  padding: 0 1in 0 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: right;
+    }
+
+
+    #clock {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #27ae60;
+    }
+
+    #date {
+      font-size: 1.1rem;
+      color: #555;
+      margin-top: 6px;
+    }
+
+table {
+  width: 100%;     
+  min-width: 900px; 
+  border-spacing: 0 12px;
+  background: transparent;
+  font-size: 1rem;
+  border-radius: 2px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+  overflow: auto;
+  margin-top: 1px; 
+}
+
+
+ .table thead th {
+  position: sticky;
+  top: 0;  
+  background-color: #3B3552;
+  color: white;
+  padding: 18px 24px;
+  text-align: left;
+  font-weight: 700;
+  z-index: 10;  
+  box-shadow: 0 3px 7px rgba(0,0,0,0.15);
+}
+
+    tbody tr {
+      background: #fff;
+      box-shadow: 0 1.5px 6px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      cursor: default;
+    }
+
+    tbody tr:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+
+    tbody td {
+      padding: 16px 24px;
+      vertical-align: middle;
+      color: #444;
+    }
+  .pagination {
+  position: fixed;
+  z-index: 1000;
+  bottom: 20px;
+  left: 55%; 
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+
+    .pagination button {
+      color: rgb(0, 0, 0);
+      border: none;
+      padding: 8px 14px;
+      margin: 0 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    
+    .pagination button:disabled {
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .calculator-sidebar {
+  position: fixed;  
+  top: 60px;       
+  left: 10px;       
+  z-index: 1000;
+  text-align: center;
+}
+
+#calculatorBtn {
+  position: relative; 
+  cursor: pointer;
+}
+
+#calculatorPanel {
+  position: absolute; 
+  top: 40px;          
+  left: 0;
+  display: none;
+}
+
+
+#calcInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  text-align: right;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  background: #fff;
+}
+
+.buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  grid-gap: 5px;
+}
+
+.button {
+  padding: 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  background: #e0e0e0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.button:active {
+  background: #d1d1d1;
+}
+
+.operator {
+  background: #ff9500;
+  color: #fff;
+}
+
+.operator:active {
+  background: #e08b00;
+}
+
+.button-zero {
+  grid-column: span 2; 
+}
+
+#calculatorBtn {
+  margin-top: 15px;
+  position: relative;
+  left: 600px;
+  cursor: pointer;
+}
+
+  </style>
+
+</style>
+</head>
+<body>
+  <nav class="sidebar">
+  <h2><i class="bi bi-person-badge-fill"></i> Staff Panel</h2>
+
+  <a href="/staff-overview">
+    <i class="bi bi-speedometer2"></i> Overview
+  </a>
+
+  <a href="/queue" class="active">
+    <i class="bi bi-people-fill"></i> Queue
+  </a>
+
+  <a href="/sales">
+    <i class="bi bi-bar-chart-line-fill"></i> Sales
+  </a>
+
+  <a href="/staff-inventory">
+    <i class="bi bi-box-seam-fill"></i> Inventory
+  </a>
+
+  <a href="/logout">
+    <i class="bi bi-box-arrow-right"></i> Logout
+  </a>
+</nav>
+
+<main class="main-content">
+  <nav class="top-nav">
+    <a href="/queue" class="active">Current Queue</a>
+    <a href="/queue/completed">Completed Services</a>
+  </nav>
+
+  <div class="header-row">
+    <div class="clock-calendar">
+      <div id="clock" style="font-weight:bold; font-size:1.2rem;"></div>
+      <div id="date" style="color:#555;"></div>
+    </div>
+  </div>
+  
+  <% if (action === 'approved') { %>
+    <div id="approvedSuccessTrigger" data-bs-toggle="modal" data-bs-target="#successModalApproved"></div>
+  <% } else if (action === 'cancelled') { %>
+    <div id="cancelledSuccessTrigger" data-bs-toggle="modal" data-bs-target="#successModalCancelled"></div>
+  <% } %>
+
+<div class="calculator-sidebar">
+  <button id="calculatorBtn">🧮</button>
+  <div id="calculatorPanel" style="display:none;">
+<input type="text" id="calcInput" class="calc-input" readonly>
+    <div class="buttons-grid">
+      <button class="button operator">÷</button>
+      <button class="button">1</button>
+      <button class="button">2</button>
+      <button class="button">3</button>
+      <button class="button operator">+</button>
+
+      <button class="button">4</button>
+      <button class="button">5</button>
+      <button class="button">6</button>
+      <button class="button operator">-</button>
+
+      <button class="button">7</button>
+      <button class="button">8</button>
+      <button class="button">9</button>
+      <button class="button operator">×</button>
+
+      <button class="button button-zero">0</button>
+      <button class="button">.</button>
+      <button class="button operator">=</button>
+      <button class="button">%</button>
+      <button id="calcClear" class="button" style="margin-top:5px; background:#f44336; color:#fff;">C</button>
+      <button class="button">&lt;</button>
+    </div>
+  </div>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Customer</th>
+      <th>Service</th>
+      <th>Status</th>
+      <th>Queue #</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="queue-body">
+    <% (queueDetails || []).forEach(q => { %>
+      <tr data-id="<%= q.id %>" data-service="<%= q.service_type %>" data-name="<%= q.customer_name %>" data-queue="<%= q.queue_number %>">
+        <td><%= q.id %></td>
+        <td><%= q.customer_name %></td>
+        <td><%= q.service_type %></td>
+        <td><span class="status <%= q.status %>"><%= q.status %></span></td>
+        <td><%= q.queue_number %></td>
+        <td>
+          <% if (q.service_type.toLowerCase() === 'milling') { %>
+            <button type="button" class="btn btn-success input-btn" data-id="<%= q.id %>">Input</button>
+          <% } else { %>
+            <button type="button" class="btn btn-success view-btn"
+              data-id="<%= q.id %>"
+              data-service="<%= q.service_type %>"
+              data-name="<%= q.customer_name %>"
+              data-queue="<%= q.queue_number %>">
+              View
+            </button>
+          <% } %>
+
+          <% if (q.status !== 'completed') { %>
+            <button type="button" class="btn btn-danger cancel-btn" data-id="<%= q.id %>" data-name="<%= q.customer_name %>" data-queue="<%= q.queue_number %>">Cancel</button>
+          <% } %>
+
+          <% if (q.status === 'waiting') { %>
+            <button type="button" class="btn btn-primary approve-btn" data-id="<%= q.id %>" data-name="<%= q.customer_name %>" data-queue="<%= q.queue_number %>">Approve</button>
+          <% } %>
+
+          <% if (q.status === 'serving') { %>
+            <form action="/queue/<%= q.id %>/done" method="post" class="d-inline">
+              <button class="btn btn-secondary" type="submit">Complete</button>
+            </form>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+ <div class="modal fade" id="inputModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Input Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="inputForm" method="POST">
+          <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" min="0" step="0.01" required>
+          </div>
+          <div class="mb-3">
+            <label for="weight" class="form-label">Weight (kg)</label>
+            <input type="number" class="form-control" id="weight" name="weight" min="0" step="0.01" required>
+          </div>
+          <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity of Sacks</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="0" step="1" required>
+          </div>
+          <div class="text-end">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <div class="modal fade" id="viewModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="viewModalBody">
+       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <div class="modal fade" id="cancelModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Cancel Queue</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Cancel queue for <strong id="cancelCustomerName"></strong> (Queue <span id="cancelQueueNumber"></span>)?</p>
+        <form id="cancelForm" method="POST">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="submit" class="btn btn-danger">Yes, Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <div class="modal fade" id="approveModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Approve Queue</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Approve queue for <strong id="approveCustomerName"></strong> (Queue <span id="approveQueueNumber"></span>)?</p>
+        <form id="approveForm" method="POST">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+          <button type="submit" class="btn btn-primary">Yes, Approve</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const tbody = document.getElementById('queue-body');
+
+ function renderQueue(queueData) {
+  tbody.innerHTML = '';  
+
+  if (!queueData || queueData.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No queue entries</td></tr>`;
+    return;
+  }
+
+  queueData.forEach(q => {
+    const tr = document.createElement('tr');
+    tr.dataset.id = q.id;
+    tr.dataset.service = q.service_type;
+    tr.dataset.name = q.customer_name;
+    tr.dataset.queue = q.queue_number;
+
+    let actions = '';
+
+    if (q.service_type.toLowerCase() === 'milling') {
+      actions += `<button class="btn btn-success input-btn" data-id="${q.id}">Input</button> `;
+    } else {
+      actions += `<button class="btn btn-success view-btn"
+                  data-id="${q.id}"
+                  data-service="${q.service_type}"
+                  data-name="${q.customer_name}"
+                  data-queue="${q.queue_number}">View</button> `;
+    }
+
+    if (q.status !== 'completed') {
+      actions += `<button class="btn btn-danger cancel-btn" data-id="${q.id}" data-name="${q.customer_name}" data-queue="${q.queue_number}">Cancel</button> `;
+    }
+
+    if (q.status === 'waiting') {
+      actions += `<button class="btn btn-primary approve-btn" data-id="${q.id}" data-name="${q.customer_name}" data-queue="${q.queue_number}">Approve</button> `;
+    }
+
+    if (q.status === 'serving') {
+      actions += `<form action="/queue/${q.id}/done" method="post" class="d-inline">
+                    <button class="btn btn-secondary" type="submit">Complete</button>
+                  </form>`;
+    }
+
+    tr.innerHTML = `
+      <td>${q.id}</td>
+      <td>${q.customer_name}</td>
+      <td>${q.service_type}</td>
+      <td><span class="status ${q.status}">${q.status}</span></td>
+      <td>${q.queue_number}</td>
+      <td>${actions}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+ const socket = io();
+socket.on('queueUpdated', updatedQueue => {
+  renderQueue(updatedQueue);
+});
+document.addEventListener('click', async e => {
+
+   if (e.target.matches('.input-btn')) {
+    const id = e.target.dataset.id;
+    const inputForm = document.getElementById('inputForm');
+    inputForm.action = `/queue/${id}/input-amount`;
+    new bootstrap.Modal(document.getElementById('inputModal')).show();
+  }
+
+   if (e.target.matches('.view-btn')) {
+    const id = e.target.dataset.id;
+    try {
+      const response = await fetch(`/queue/${id}/details`);
+      if (!response.ok) throw new Error('Failed to load details');
+      const data = await response.json();
+
+      let content = `
+        <p><strong>Name:</strong> ${data.customer_name}</p>
+        <p><strong>Service:</strong> ${data.service_type}</p>
+        <p><strong>Queue No.:</strong> ${data.queue_number}</p>
+      `;
+
+      if (data.service_type.toLowerCase() === 'purchasing') {
+        content += `
+          <p><strong>Product:</strong> ${data.product_name || 'N/A'}</p>
+          <p><strong>Quantity:</strong> ${data.quantity || 0}</p>
+          <p><strong>Total Amount:</strong> ₱${Number(data.amount || 0).toFixed(2)}</p>
+          <p><strong>Notes:</strong> ${data.notes || 'None'}</p>
+        `;
+      } else if (data.service_type.toLowerCase() === 'milling') {
+        content += `
+          <p><strong>Weight:</strong> ${data.weight || 'N/A'} kg</p>
+          <p><strong>Rice Type:</strong> ${data.product_type || 'N/A'}</p>
+        `;
+      }
+
+      document.getElementById('viewModalBody').innerHTML = content;
+      new bootstrap.Modal(document.getElementById('viewModal')).show();
+    } catch (err) {
+      console.error('Error loading queue details:', err);
+      alert('Unable to load order details.');
+    }
+  }
+
+   if (e.target.matches('.cancel-btn')) {
+    const { id, name, queue } = e.target.dataset;
+    document.getElementById('cancelCustomerName').textContent = name;
+    document.getElementById('cancelQueueNumber').textContent = queue;
+    document.getElementById('cancelForm').action = `/queue/${id}/cancel`;
+    new bootstrap.Modal(document.getElementById('cancelModal')).show();
+  }
+
+   if (e.target.matches('.approve-btn')) {
+    const { id, name, queue } = e.target.dataset;
+    document.getElementById('approveCustomerName').textContent = name;
+    document.getElementById('approveQueueNumber').textContent = queue;
+    document.getElementById('approveForm').action = `/queue/${id}/approve`;
+    new bootstrap.Modal(document.getElementById('approveModal')).show();
+  }
+
+});
+
+const calculatorBtn = document.getElementById('calculatorBtn');
+const calculatorPanel = document.getElementById('calculatorPanel');
+let currentField = document.getElementById('calcInput');
+
+ calculatorBtn.addEventListener('click', () => {
+  calculatorPanel.style.display = calculatorPanel.style.display === 'block' ? 'none' : 'block';
+});
+
+ document.querySelectorAll('.calc-input').forEach(input => {
+  input.addEventListener('focus', () => {
+    currentField = input;
+  });
+});
+
+ document.querySelectorAll('.buttons-grid .button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!currentField) return;
+    const val = btn.textContent;
+
+    if (val === 'C') {
+      currentField.value = '';
+    } else if (val === '<') {
+      currentField.value = currentField.value.slice(0, -1);
+    } else if (val === '=') {
+      try {
+        currentField.value = eval(currentField.value.replace(/×/g,'*').replace(/÷/g,'/'));
+      } catch(e) {
+        currentField.value = 'Error';
+      }
+    } else {
+      currentField.value += val;
+    }
+  });
+});
+
+
+ function updateClockAndDate() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { 
+    hour: '2-digit', minute: '2-digit', second: '2-digit' 
+  });
+  document.getElementById('date').textContent = now.toLocaleDateString('en-US', { 
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+  });
+}
+setInterval(updateClockAndDate, 1000);
+updateClockAndDate();
+
+ window.onload = function () {
+  const rowsPerPage = 5;
+  const table = document.getElementById('doneQueueTable');
+  const tbody = table.querySelector('tbody');
+  let rows = Array.from(tbody.querySelectorAll('tr')).filter(row => !row.classList.contains('no-data'));
+  const paginationContainer = document.getElementById('pagination');
+  let currentPage = 1;
+
+  function showPage(page) {
+    currentPage = page;
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    rows.forEach((row, i) => row.style.display = i >= start && i < end ? '' : 'none');
+    renderPagination();
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+    paginationContainer.innerHTML = '';
+    if (totalPages <= 1) return;
+
+    const prev = document.createElement('button');
+    prev.textContent = 'Previous';
+    prev.disabled = currentPage === 1;
+    prev.onclick = () => showPage(currentPage - 1);
+    paginationContainer.appendChild(prev);
+
+    const pageNum = document.createElement('span');
+    pageNum.textContent = `Page ${currentPage} of ${totalPages}`;
+    pageNum.style.margin = '0 10px';
+    paginationContainer.appendChild(pageNum);
+
+    const next = document.createElement('button');
+    next.textContent = 'Next';
+    next.disabled = currentPage === totalPages;
+    next.onclick = () => showPage(currentPage + 1);
+    paginationContainer.appendChild(next);
+  }
+
+  if (rows.length > 0) showPage(1);
+
+  document.querySelectorAll('.generate-ticket-btn').forEach(btn => {
+    btn.addEventListener('click', () => window.open(`/generate-ticket/${btn.dataset.queueId}`, '_blank'));
+  });
+};
+
+</script>
+
+
+</body>
+</html>

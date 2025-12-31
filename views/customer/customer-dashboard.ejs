@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eumar Rice Mill</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+
+ * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #e7e7e7;
+      color: #333;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 0;
+    }
+
+    header {
+      text-align: center;
+      font-size: 3rem;
+      font-weight: bold;
+      padding: 20px 0;
+      color: #3a3a3a;
+    }
+
+    section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1800px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2px;
+      padding: 20px;
+    }
+
+    .queue-box {
+      background-color: #ffffffdc;
+      border-radius: 20px;
+      padding: 25px 35px;
+      width: 100%;
+      max-width: 700px;
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #eee;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+      flex-shrink: 0;
+    }
+
+    #join {
+      width: 100%;
+      max-width: 500px;
+      height: 80vh;
+      background: #ffffffdc;
+      padding: 25px;
+      border-radius: 20px;
+      overflow-y: auto;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid #eee;
+      flex-shrink: 0;
+    }
+
+    section h2 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #444;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    #join form label {
+      font-weight: 600;
+      color: #444;
+      font-size: 1.2rem;
+    }
+
+    #join form input,
+    #join form select,
+    #join form textarea,
+    #join form button {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background: #fff;
+      font-size: 1.1rem;
+    }
+
+    #join form button {
+      background-color: #ffc107;
+      color: #000;
+      font-weight: 700;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    #join form button:hover {
+      background-color: #ffcd39;
+      transform: scale(1.05);
+    }
+
+    .queue-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .queue-header {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e5e5e5;
+      font-weight: 700;
+      color: #555;
+      font-size: 1.4rem;
+    }
+
+    .queue-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .queue-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #efefef;
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    .queue-row:last-child {
+      border-bottom: none;
+    }
+
+    .status {
+      padding: 6px 18px;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .status.waiting {
+      background-color: #f39c12;
+    }
+
+    .status.serving {
+      background-color: #28a745;
+    }
+
+    .no-data {
+      text-align: center;
+      margin-top: 20px;
+      color: #555;
+      font-style: italic;
+      font-size: 1.3rem;
+    }
+ .success-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+ .success-modal.show {
+  display: flex;
+}
+
+ .success-modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.success-modal-content h2 {
+  color: #27ae60;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+.success-modal-content p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.success-modal-content button {
+  width: auto;
+  padding: 10px 25px;
+  background-color: #27ae60;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.success-modal-content button:hover {
+  background-color: #219150;
+}
+
+    #modalMessage {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    #modalOkBtn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    #modalOkBtn:hover {
+      background-color: #218838;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<main class="main-content">
+   <section id="join-section">
+      <h2>Join Queue</h2>  
+      <div id="join">
+        <form id="serviceForm" action="/place-order" method="POST">
+          <label for="serviceType">Select Service Type:</label>
+          <select name="serviceType" id="serviceType" required>
+            <option value="" disabled selected>-- Choose a service --</option>
+            <option value="milling">Milling</option>
+            <option value="purchasing">Purchasing</option>
+          </select>
+
+          <div id="formFields"></div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </section>
+
+   <section id="waiting">
+    <h2>Waiting Queue</h2>
+    <div class="queue-box">
+      <div class="queue-header">
+        <span>Queue #</span>
+        <span>Name</span>
+        <span>Status</span>
+      </div>
+      <div class="queue-list">
+        <% 
+          const waitingQueues = allQueues
+            .filter(q => q.status && q.status.trim().toLowerCase() === 'waiting')
+            .sort((a, b) => a.queue_number - b.queue_number);
+
+          if (waitingQueues.length > 0) {
+            waitingQueues.forEach(queue => { 
+        %>
+          <div class="queue-row">
+            <span><%= queue.queue_number %></span>
+            <span><%= queue.customer_name %></span>
+            <span class="status waiting">Waiting</span>
+          </div>
+        <% }); } else { %>
+          <p class="no-data">No waiting queues available.</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+   <section id="serving">
+    <h2>Serving Queue</h2>
+    <div class="queue-box">
+      <div class="queue-header">
+        <span>Queue #</span>
+        <span>Name</span>
+        <span>Status</span>
+      </div>
+      <div class="queue-list">
+        <% 
+          const servingQueues = allQueues
+            .filter(q => q.status && q.status.trim().toLowerCase() === 'serving')
+            .sort((a, b) => a.queue_number - b.queue_number);
+
+          if (servingQueues.length > 0) {
+            servingQueues.forEach(queue => { 
+        %>
+          <div class="queue-row">
+            <span><%= queue.queue_number %></span>
+            <span><%= queue.customer_name %></span>
+            <span class="status serving">Serving</span>
+          </div>
+        <% }); } else { %>
+          <p class="no-data">No serving queues available.</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="successModal" class="success-modal">
+  <div id="successModalContent" class="success-modal-content">
+    <h2>Success!</h2>
+    <p id="modalMessage">Your order has been placed.</p>
+    <button id="modalOkBtn">OK</button>
+  </div>
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  const waitingList = document.querySelector('#waiting .queue-list');
+  const servingList = document.querySelector('#serving .queue-list');
+
+  function renderQueues(queues) {
+    const waitingQueues = queues
+      .filter(q => q.status?.trim().toLowerCase() === 'waiting')
+      .sort((a, b) => a.queue_number - b.queue_number);
+
+    const servingQueues = queues
+      .filter(q => q.status?.trim().toLowerCase() === 'serving')
+      .sort((a, b) => a.queue_number - b.queue_number);
+
+    waitingList.innerHTML = waitingQueues.length
+      ? waitingQueues.map(q => `
+          <div class="queue-row">
+            <span>${q.queue_number}</span>
+            <span>${q.customer_name}</span>
+            <span class="status waiting">Waiting</span>
+          </div>
+        `).join('')
+      : `<p class="no-data">No waiting queues available.</p>`;
+
+    servingList.innerHTML = servingQueues.length
+      ? servingQueues.map(q => `
+          <div class="queue-row">
+            <span>${q.queue_number}</span>
+            <span>${q.customer_name}</span>
+            <span class="status serving">Serving</span>
+          </div>
+        `).join('')
+      : `<p class="no-data">No serving queues available.</p>`;
+  }
+
+  socket.on('queueUpdated', updatedQueue => renderQueues(updatedQueue));
+
+  const serviceForm = document.getElementById('serviceForm');
+  const serviceType = document.getElementById('serviceType');
+  const formFields = document.getElementById('formFields');
+
+  serviceType.addEventListener('change', async () => {
+    if (serviceType.value === 'milling') {
+      formFields.innerHTML = `
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+      `;
+    } else if (serviceType.value === 'purchasing') {
+      let productsOptions = '<option value="" disabled selected>Select product</option>';
+      try {
+        const response = await fetch('/api/products');
+        const products = await response.json();
+        products.forEach(p => {
+          productsOptions += `<option value="${p.id}" data-price="${p.price}">${p.name}</option>`;
+        });
+      } catch (e) {
+        productsOptions = '<option disabled>Failed to load products</option>';
+      }
+
+      formFields.innerHTML = `
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="product">Product:</label>
+        <select name="product" id="productSelect" required>${productsOptions}</select>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantityInput" min="1" value="1" required />
+
+        <label for="amount">Total Amount:</label>
+        <input type="number" name="amount" id="amountInput" readonly required />
+      `;
+
+      const productSelect = document.getElementById('productSelect');
+      const quantityInput = document.getElementById('quantityInput');
+      const amountInput = document.getElementById('amountInput');
+
+      function calculateAmount() {
+        const selectedOption = productSelect.selectedOptions[0];
+        const price = parseFloat(selectedOption?.dataset.price) || 0;
+        const quantity = parseFloat(quantityInput.value) || 0;
+        amountInput.value = (price * quantity).toFixed(2);
+      }
+
+      productSelect.addEventListener('change', calculateAmount);
+      quantityInput.addEventListener('input', calculateAmount);
+      calculateAmount();
+    }
+  });
+
+  serviceForm.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const formData = new FormData(serviceForm);
+    const data = {};
+    formData.forEach((v, k) => data[k] = v.trim());
+
+    if (data.quantity) data.quantity = Number(data.quantity);
+    if (data.amount) data.amount = Number(data.amount);
+
+    try {
+      const response = await fetch('/place-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) throw new Error('Failed to submit order');
+
+      showModal('Order placed successfully!');
+
+    } catch (err) {
+      console.error(err);
+      alert('Failed to submit order.');
+    }
+  });
+function showModal(message) {
+  const modal = document.getElementById("successModal");
+  const msg = document.getElementById("modalMessage");
+
+  msg.textContent = message;
+  modal.classList.add("show");
+
+  document.getElementById("modalOkBtn").onclick = () => {
+    modal.classList.remove("show");
+    setTimeout(() => {
+      window.location.reload();
+    }, 200);
+  };
+}
+
+</script>
+
+</body>
+</html>

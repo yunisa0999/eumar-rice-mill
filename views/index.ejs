@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ERM Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: url('/rice-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-wrapper {
+      background-color: rgba(248, 235, 234, 0.85);
+      padding: 25px 40px;
+      border-radius: 15px;
+      width: 450px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      text-align: center;
+    }
+    .login-logo { width: 180px; margin-bottom: 10px; }
+    .subtitle { font-weight: 600; color: #3949ab; margin-bottom: 15px; }
+    input, button {
+      width: 100%; margin-top: 10px; padding: 12px;
+      border-radius: 8px; border: none; font-size: 1rem;
+    }
+    input { background-color: #fcfcfc; border: 1.5px solid #444; }
+    input:focus { border-color: #ffcc00; background-color: #333; color: #fff; }
+    button {
+      background: red; color: #000; font-weight: bold; cursor: pointer;
+      border-radius: 30px; box-shadow: 0 0 15px #ffcc00;
+    }
+    button:hover { transform: scale(1.05); }
+    .error {
+      background-color: rgba(229, 57, 53, 0.9);
+      color: white; padding: 10px; border-radius: 6px; margin-bottom: 10px;
+    }
+    .modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex; justify-content: center; align-items: center;
+      visibility: hidden; opacity: 0;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal.show { visibility: visible; opacity: 1; }
+    .spinner {
+      width: 50px; height: 50px;
+      border: 5px solid #ccc; border-top: 5px solid #4caf50;
+      border-radius: 50%; animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
+    #checkmark {
+      font-size: 48px; color: #00ff00; display: none;
+      animation: popIn 0.6s ease; margin-top: 10px;
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+<div class="login-wrapper">
+    <img class="login-logo" src="/erm-logo-removebg-preview.png" alt="ERM Logo" />
+    <p class="subtitle">Serving You Better, Faster, Smarter</p>
+    <p class="login-text">Login to your account</p>
+    <% if (error) { %><div class="error"><%= error %></div><% } %>
+
+    <form action="/login" method="POST">
+      <input type="text" name="email" placeholder="Email or Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+<p><a href="#" id="openForgotModal">Forgot Password?</a></p>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <div id="successModal" class="modal">
+    <div class="modal-content" style="text-align:center; color:#fff;">
+      <div id="spinner" class="spinner"></div>
+      <div id="checkmark">✅</div>
+      <h2 id="modalText" style="margin-top:15px;">Logging in...</h2>
+    </div>
+  </div>
+ <div id="forgotModal" class="modal">
+  <div style="background: #fff; padding: 20px 30px; border-radius: 15px; text-align:center; width: 350px;">
+    <h2>Forgot Password</h2>
+    <p>Enter your username or email:</p>
+    <input type="text" id="forgotEmail" placeholder="Username or Email" />
+    <button id="sendTempPassword" style="margin-top:15px;">Send Temporary Password</button>
+    <p id="forgotMessage" style="margin-top:10px; color:green;"></p>
+    <button id="closeForgotModal" style="margin-top:15px; background:#ccc; color:#000;">Close</button>
+  </div>
+</div>
+
+  <script id="templateSuccess" type="application/json"><%- JSON.stringify(success || false) %></script>
+<script>
+  const forgotModal = document.getElementById('forgotModal');
+  const openForgotModal = document.getElementById('openForgotModal');
+  const closeForgotModal = document.getElementById('closeForgotModal');
+  const sendTempPassword = document.getElementById('sendTempPassword');
+  const forgotMessage = document.getElementById('forgotMessage');
+
+   openForgotModal.addEventListener('click', (e) => {
+    e.preventDefault();
+    forgotModal.classList.add('show');
+    forgotMessage.textContent = '';
+  });
+
+   closeForgotModal.addEventListener('click', () => {
+    forgotModal.classList.remove('show');
+  });
+
+   sendTempPassword.addEventListener('click', async () => {
+    const emailOrUsername = document.getElementById('forgotEmail').value.trim();
+    if (!emailOrUsername) {
+      forgotMessage.style.color = 'red';
+      forgotMessage.textContent = 'Please enter your email or username.';
+      return;
+    }
+
+    forgotMessage.style.color = 'green';
+    forgotMessage.textContent = 'Sending temporary password...';
+
+    try {
+      const response = await fetch('/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emailOrUsername })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        forgotMessage.style.color = 'green';
+        forgotMessage.textContent = 'Temporary password sent! Check your email.';
+      } else {
+        forgotMessage.style.color = 'red';
+        forgotMessage.textContent = data.message || 'Something went wrong.';
+      }
+    } catch (err) {
+      forgotMessage.style.color = 'red';
+      forgotMessage.textContent = 'Error sending email.';
+      console.error(err);
+    }
+  });
+</script>
+
+  <script>
+    const loginSuccess = JSON.parse(document.getElementById('templateSuccess').textContent);
+    const redirectUrl = "<%= user && user.role === 'admin' ? '/admin' : user && user.role === 'staff' ? '/staff' : '/' %>";
+
+    if (loginSuccess) {
+      const modal = document.getElementById("successModal");
+      const spinner = document.getElementById("spinner");
+      const checkmark = document.getElementById("checkmark");
+      const modalText = document.getElementById("modalText");
+
+      modal.classList.add("show");
+      spinner.style.display = "block";
+      checkmark.style.display = "none";
+      modalText.textContent = "Logging in...";
+
+      setTimeout(() => {
+        spinner.style.display = "none";
+        checkmark.style.display = "block";
+        modalText.textContent = "Login Successful!";
+      }, 6000);
+
+      setTimeout(() => {
+        window.location.href = redirectUrl;
+      }, 8000);
+    }
+  </script>
+</body>
+</html>

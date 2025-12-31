@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eumar Rice Mill</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f6f7;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 230px;
+      height: 100vh;
+      background-color: #0b6514;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 40px 25px;
+    }
+    .sidebar h2 {
+      display: flex;
+      align-items: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+    }
+    .sidebar h2 i { margin-right: 10px; }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+    .sidebar a:hover,
+    .sidebar a.active { background-color: #34a853; }
+    .sidebar a:last-child { margin-top: auto; }
+
+    .main-content {
+      position: absolute;
+      top: 0;
+      left: 230px;
+      right: 0;
+      bottom: 0;
+      background: #e0e8ef;
+      overflow-y: auto;
+      padding: 0;
+    }
+ .top-nav a {
+      padding: 8px 12px;
+      font-weight: 600;
+      color: #171515;
+      text-decoration: none;
+      border-radius: 0;
+      background-color: transparent;
+      box-shadow: none;
+      border: none;
+      transition: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .top-nav a.active {
+      color: #27ae60;
+      font-weight: 700;
+      text-decoration: underline;
+      box-shadow: none;
+    }
+
+    .top-nav a:hover:not(.active) {
+      color: #ffd700;
+      background-color: transparent;
+      cursor: pointer;
+      box-shadow: none;
+      border: none;
+    }
+.main-content {
+  position: absolute;
+  top: 0;
+  left: 220px;  
+  right: 0;
+  bottom: 0;
+  background: #e0e8ef;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;           
+  margin: 0;
+}
+
+.top-nav {
+  position: relative;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-bottom: 1px solid #ccc;
+  margin: 0;
+  padding: 0;
+}
+
+.header-row {
+  background: #ffffff;
+  height: 100px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.clock-calendar {
+  background-color: #ffffff;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: right;
+}
+
+    h1 {
+      font-weight: 700;
+      color: #34495e;
+      margin: 0 0 25px;
+      border-left: 6px solid #27ae60;
+      padding-left: 18px;
+      letter-spacing: 0.7px;
+      user-select: none;
+      background: #ecf0f1;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-radius: 8px;
+      display: inline-block;
+      transition: color 0.3s ease;
+    }
+    h1:hover, h2:hover {
+      color: #2ecc71;
+      cursor: default;
+    }
+
+   
+    .header-row h1 {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #3B3552;
+      margin: 0;
+      padding-left: 18px;
+      border-left: 6px solid #27ae60;
+      background: #ecf0f1;
+      border-radius: 8px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      letter-spacing: 0.7px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+      user-select: none;
+      display: inline-block;
+    }
+
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      user-select: none;
+    }
+
+    .header-row h1 {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #27ae60;
+      margin: 0;
+      padding-left: 18px;
+      border-left: 6px solid #27ae60;
+      background: #ecf0f1;
+      border-radius: 8px;
+      padding-top: 5px;
+      padding-bottom: 8px;
+      letter-spacing: 0.7px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+      user-select: none;
+      display: inline-block;
+    }
+
+    .clock-calendar {
+  background-color: transparent;
+  padding: 0 1in 0 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;   
+  text-align: right;
+}
+
+
+    #clock {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #27ae60;
+    }
+
+    #date {
+      font-size: 1.1rem;
+      color: #555;
+      margin-top: 6px;
+    }
+
+table {
+  width: 100%;     
+  min-width: 900px; 
+  border-spacing: 0 12px;
+  background: transparent;
+  font-size: 1rem;
+  border-radius: 2px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+  overflow: hidden;
+  margin-top: 1px;
+}
+
+
+    thead th {
+      background-color: #3B3552;
+      color: white;
+      padding: 18px 24px;
+      text-align: left;
+      user-select: none;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      box-shadow: 0 3px 7px rgba(0,0,0,0.15);
+      border-radius: 1px 1px 0 0;
+       margin-top: 10px;
+    }
+
+    tbody tr {
+      background: #fff;
+      box-shadow: 0 1.5px 6px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      cursor: default;
+    }
+
+    tbody tr:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+
+    tbody td {
+      padding: 16px 24px;
+      vertical-align: middle;
+      color: #444;
+    }
+    .status {
+      padding: 6px 16px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: capitalize;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .done {
+      background-color: #2980b9;
+      color: #fff;
+      border: 1px solid #1c5980;
+      box-shadow: 0 0 8px rgba(41, 128, 185, 0.6);
+    }
+
+    .generate-ticket-btn {
+      padding: 8px 16px;
+      background-color: #27ae60;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .generate-ticket-btn:hover { background-color: #219150; }
+
+  .pagination {
+  position: fixed;
+  z-index: 1000;
+  bottom: 20px;
+  left: 55%; 
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+
+    .pagination button {
+      color: rgb(0, 0, 0);
+      border: none;
+      padding: 8px 14px;
+      margin: 0 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    
+    .pagination button:disabled {
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="sidebar">
+    <h2><i class="bi bi-person-badge-fill"></i> Staff Panel</h2>
+    <a href="/staff-overview"><i class="bi bi-speedometer2"></i> Overview</a>
+    <a href="/queue" class="active"><i class="bi bi-people-fill"></i> Queue</a>
+    <a href="/sales"><i class="bi bi-bar-chart-line-fill"></i> Sales</a>
+    <a href="/staff-inventory"><i class="bi bi-box-seam-fill"></i> Inventory</a>
+    <a href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+  </nav>
+
+  <main class="main-content">
+    <nav class="top-nav">
+      <a href="/queue">Current Queue</a>
+      <a href="/queue/completed" class="active">Completed Queue</a>
+    </nav>
+    <div class="table-container">
+      <table id="doneQueueTable">
+        <thead>
+          <tr>
+            <th>Queue ID</th>
+            <th>Customer</th>
+            <th>Service Type</th>
+            <th>Status</th>
+            <th>Queue Number</th>
+            <th>Ticket</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (doneQueues && doneQueues.length > 0) { %>
+            <% doneQueues.forEach(q => { %>
+              <tr>
+                <td><%= q.id %></td>
+                <td><%= q.customer_name %></td>
+                <td><%= q.service_type %></td>
+                <td><span class="status done"><%= q.status %></span></td>
+                <td><%= q.queue_number %></td>
+                <td><button class="generate-ticket-btn" data-queue-id="<%= q.id %>">Generate Ticket</button></td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr class="no-data"><td colspan="6">No completed queues found.</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </main>
+
+  <script>
+  
+    window.onload = function () {
+      const rowsPerPage = 5;
+      const table = document.getElementById('doneQueueTable');
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr')).filter(row => !row.classList.contains('no-data'));
+      const paginationContainer = document.getElementById('pagination');
+      let currentPage = 1;
+
+      function showPage(page) {
+        currentPage = page;
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        rows.forEach((row, i) => row.style.display = i >= start && i < end ? '' : 'none');
+        renderPagination();
+      }
+
+      function renderPagination() {
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+        paginationContainer.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        const prev = document.createElement('button');
+        prev.textContent = 'Previous';
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => showPage(currentPage - 1);
+        paginationContainer.appendChild(prev);
+
+        const pageNum = document.createElement('span');
+        pageNum.textContent = `Page ${currentPage} of ${totalPages}`;
+        pageNum.style.margin = '0 10px';
+        paginationContainer.appendChild(pageNum);
+
+        const next = document.createElement('button');
+        next.textContent = 'Next';
+        next.disabled = currentPage === totalPages;
+        next.onclick = () => showPage(currentPage + 1);
+        paginationContainer.appendChild(next);
+      }
+
+      if (rows.length > 0) showPage(1);
+      document.querySelectorAll('.generate-ticket-btn').forEach(btn => {
+        btn.addEventListener('click', () => window.open(`/generate-ticket/${btn.dataset.queueId}`, '_blank'));
+      });
+    };
+  </script>
+</body>
+</html>

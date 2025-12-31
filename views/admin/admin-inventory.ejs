@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eumar Rice Mill</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background-color: #F5F7F5;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #2E8B57;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 1rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+  z-index: 1001; 
+}
+
+    .sidebar-logo img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: block;
+      box-shadow: 5px rgb(246,243,243);
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 1.3rem;
+      color: #A7C957;
+      margin-bottom: 1.5rem;
+      user-select: none;
+    }
+
+    .nav-link {
+      color: #FDFDFD;
+      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      transition: background-color 0.3s, padding-left 0.2s;
+      border-left: 4px solid transparent;
+    }
+
+    .nav-link:hover {
+      background-color: #3DAE72;
+      border-left: 4px solid #A7C957;
+      padding-left: 1.8rem;
+      text-decoration: none;
+    }
+
+    .nav-link.active {
+      background-color: #276749;
+      border-left: 4px solid #A7C957;
+    }
+
+    .nav-link svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.8rem;
+      fill: white;
+    }
+
+    
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    right: 0;
+    height: 60px;
+    background-color:  #2E8B57; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    z-index: 999;
+  }
+
+  .topbar a {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 0.95rem;
+  }
+
+  .topbar a:hover {
+    color: #3498db;
+  }
+
+.main-content {
+  position: fixed;       
+  top: 0;                
+  left: 250px;        
+  width: calc(100% - 250px);   
+  height: 100vh;          
+  padding: 1rem;         
+  box-sizing: border-box;
+  overflow: hidden;      
+}
+
+
+
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 70px;
+    }
+
+    .sidebar h2 {
+      display: none;
+    }
+
+    .nav-link {
+      justify-content: center;
+      font-size: 0;
+    }
+
+    .nav-link svg {
+      margin: 0;
+    }
+
+    .nav-link span {
+      display: none;
+    }
+
+    .main-content {
+      margin-left: 70px;
+      width: calc(100vw - 70px);
+    }
+  }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #A7C957;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8CB944;
+    }
+    .btn-show-details {
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  border: none;
+  color: white;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255, 126, 95, 0.5);
+  transition: all 0.3s ease;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.btn-show-details:hover {
+  background: linear-gradient(135deg, #feb47b, #ff7e5f);
+  box-shadow: 0 8px 20px rgba(254, 180, 123, 0.7);
+  transform: translateY(-2px);
+}
+
+.btn-show-details:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px rgba(255, 126, 95, 0.4);
+}
+
+    .btn {
+      padding: 0.55rem 1.25rem;
+      margin-right: 0.5rem;
+      background-color: #e1e8f7;
+      color: #2c3e50;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 700;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 6px rgba(44, 62, 80, 0.1);
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background-color: #2980b9;
+      color: white;
+      box-shadow: 0 4px 12px rgba(41, 128, 185, 0.5);
+    }
+
+
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 50%;
+      max-width: 600px;
+    }
+
+    .modal-content form input, .modal-content form select {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .close-btn {
+      background-color: #e74c3c;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      float: right;
+    }
+
+    .close-btn:hover {
+      background-color: #c0392b;
+    }
+    .low-stock-alert {
+  display: none; 
+  background-color: yellow;
+  padding: 10px;
+  color: red;
+  text-align: center;
+}
+.low-stock-alert.show {
+  display: block; 
+}
+section.search-section form {
+  display: flex;
+  align-items: center;
+  gap: 0;  
+  max-width: 400px;
+  margin: 1rem 0;
+  margin-left: auto;
+  padding: 0 1rem;
+}
+
+section.search-section form input[type="text"] {
+  flex: 1;  
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #2980b9;
+  border-radius: 25px 0 0 25px;  
+  outline-offset: 2px;
+  transition: border-color 0.3s ease;
+}
+
+section.search-section form input[type="text"]:focus {
+  border-color: #764ba2;
+  box-shadow: 0 0 6px #764ba2aa;
+}
+
+section.search-section form button.btn {
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: 0 25px 25px 0; 
+  cursor: pointer;
+  transition: background 0.3s ease;
+  user-select: none;
+  box-shadow: 0 4px 10px rgba(118, 75, 162, 0.4);
+}
+
+section.search-section form button.btn:hover {
+  background: linear-gradient(135deg, #764ba2, #667eea);
+  box-shadow: 0 6px 14px rgba(102, 126, 234, 0.7);
+}
+
+section.search-section form button.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 7px rgba(118, 75, 162, 0.3);
+}
+
+   th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #2980b9;
+      color: white;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    tbody tr:hover {
+      background-color: #f0f8ff;
+    }
+
+    form {
+      margin-bottom: 1.5rem;
+    }
+
+    form input, form button, form select {
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+    
+.nav-link.dropdown {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  padding-right: 2.5rem;
+}
+
+.nav-link.dropdown .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #FDFDFD;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-left: 4px solid transparent;
+  transition: background-color 0.3s, padding-left 0.2s;
+}
+
+.nav-link.dropdown.active .dropdown-toggle {
+  background-color: #276749;
+  border-left: 4px solid #A7C957;
+}
+
+.nav-link.dropdown .dropdown-toggle:hover {
+  background-color: #3DAE72;
+  border-left: 4px solid #A7C957;
+  padding-left: 1.8rem;
+  text-decoration: none;
+}
+
+.nav-link.dropdown .dropdown-arrow {
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.nav-link.dropdown.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.nav-link.dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #000000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 0 0 8px 8px;
+  width: 100%;
+  z-index: 1000;
+  flex-direction: column;
+}
+
+.nav-link.dropdown.open .dropdown-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-menu .dropdown-item {
+  color: white;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  border-left: 4px solid transparent;
+  transition: background-color 0.3s, padding-left 0.2s;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #3DAE72;
+  border-left: 4px solid #A7C957;
+  padding-left: 1.8rem;
+}
+.form-card {
+  height: 350px;        
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.pagination-section {
+  position: fixed;      
+  bottom: 0;            
+  left: 250px;          
+  right: 0;
+  background-color: #f5f7f5;  
+  padding: 0.5rem 1rem;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-section .pagination a,
+.pagination-section .pagination span {
+  padding: 0.5rem 1rem;
+  margin: 0 0.2rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #e1e8f7;
+  color: #2980b9;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pagination-section .pagination a:hover {
+  background-color: #2980b9;
+  color: white;
+}
+
+.pagination-section .pagination .active {
+  background-color: #2980b9;
+  color: white;
+  pointer-events: none;
+}
+
+
+
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="/erm-logo-removebg-preview.png" alt="ERM Logo">
+    </div>
+    <h2>EUMAR</h2>
+   <a href="/admin" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/sales" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M4 19h16v-2H4v2zm0-6h16v-2H4v2zm0-6v2h16V7H4z"/></svg>
+      Sales
+    </a>
+<a href="/admin/queue" class="nav-link">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 7V3L8 7h4zm0 2v7h-4l4 4 4-4h-4v-7z"/>
+  </svg>
+  Queue
+</a>
+
+    <a href="/admin/inventory" class="nav-link">
+  <svg viewBox="0 0 24 24">
+    <path d="M4 4h16v2H4V4zm0 4h16v12H4V8zm3 2v8h2v-8H7zm4 0v8h2v-8h-2zm4 0v8h2v-8h-2z"/>
+  </svg>
+  Inventory
+</a>
+     <a href="/user-management" class="nav-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span>Acitivity Logs</span>
+    </a>
+  <a href="/logout" class="nav-link mt-auto text-white">
+  <svg viewBox="0 0 24 24" fill="white">
+    <path d="M16 13v-2H7V8l-5 4 5 4v-3zM20 3h-8v2h8v14h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+  </svg>
+  Logout
+</a>
+  </aside>
+
+<main class="main-content" role="main">
+
+   <section class="d-flex flex-wrap gap-4 justify-content-between mb-4">
+
+     <button id="openAddModal" 
+      class="btn btn-success rounded-circle d-flex justify-content-center align-items-center shadow"
+      style="width: 60px; height: 60px; font-size: 2rem;">
+      +
+    </button>
+
+     <section class="search-section mb-3">
+      <form method="get" action="/inventory/search"
+        class="d-flex flex-wrap gap-2 align-items-center"
+        style="max-width: 350px;">
+
+        <input type="text" name="query"
+          placeholder="Search product"
+          required
+          class="form-control flex-grow-1"
+          style="border-radius:25px; padding:6px 15px; font-size:0.9rem;
+          box-shadow:0 1px 4px rgba(0,0,0,0.08); height:38px;">
+
+        <button type="submit" class="btn btn-primary"
+          style="border-radius:25px; padding:0 18px; font-size:0.9rem; height:38px;">
+          Search
+        </button>
+
+      </form>
+    </section>
+
+  </section>
+
+   <section class="product-list">
+    <div class="table-responsive shadow-sm p-3 rounded bg-white">
+      <table class="table table-hover align-middle">
+        <thead class="table-primary"
+          style="background: linear-gradient(90deg, #2E8B57, #A7C957); color:white;">
+          <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% inventory.forEach(item => { %>
+          <tr>
+            <td><%= item.item_name %></td>
+            <td><%= item.quantity %></td>
+            <td>₱<%= item.unit_price %></td>
+            <td><%= item.category %></td>
+
+            <td>
+              <% if(item.status === 'in_stock'){ %>
+                <span class="badge bg-success">In Stock</span>
+              <% } else { %>
+                <span class="badge bg-danger">Out of Stock</span>
+              <% } %>
+            </td>
+
+            <td>
+              <button class="btn btn-primary btn-sm"
+                onclick="toggleDetails('<%= item.item_id %>')">Details</button>
+
+              <div id="details-<%= item.item_id %>"
+                style="display:none; margin-top:10px;">
+
+                 <form method="POST"
+                  action="/inventory/edit/<%= item.item_id %>"
+                  class="mb-2">
+
+                  <input type="text" name="item_name"
+                    value="<%= item.item_name %>"
+                    class="form-control mb-1" required>
+
+                  <input type="number" name="quantity"
+                    value="<%= item.quantity %>"
+                    class="form-control mb-1" required>
+
+                  <input type="number" name="unit_price"
+                    value="<%= item.unit_price %>"
+                    class="form-control mb-1" required>
+
+                  <input type="text" name="category"
+                    value="<%= item.category %>"
+                    class="form-control mb-1" required>
+
+                  <button type="submit"
+                    class="btn btn-success btn-sm">Update</button>
+                </form>
+
+                 <a href="/inventory/delete/<%= item.item_id %>"
+                  class="btn btn-danger btn-sm">Delete</a>
+
+                 <form method="POST"
+                  action="/inventory/update-stock/<%= item.item_id %>"
+                  class="mt-2 d-flex gap-1">
+
+                  <select name="status"
+                    class="form-select form-select-sm">
+                    <option value="in_stock"
+                      <%= item.status === 'in_stock' ? 'selected' : '' %>>
+                      In Stock
+                    </option>
+                    <option value="out_of_stock"
+                      <%= item.status === 'out_of_stock' ? 'selected' : '' %>>
+                      Out of Stock
+                    </option>
+                  </select>
+
+                  <button type="submit"
+                    class="btn btn-warning btn-sm">Update Status</button>
+                </form>
+
+              </div>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+
+      </table>
+    </div>
+  </section>
+
+  <section class="pagination-section">
+  <nav class="d-flex justify-content-center">
+    <div class="pagination">
+      <% if (currentPage > 1) { %>
+        <a href="/admin/inventory?page=<%= currentPage - 1 %>">&laquo; Previous</a>
+      <% } else { %>
+        <span>&laquo; Previous</span>
+      <% } %>
+
+      <span class="active"><%= currentPage %></span>
+
+      <% if (currentPage < totalPages) { %>
+        <a href="/admin/inventory?page=<%= currentPage + 1 %>">Next &raquo;</a>
+      <% } else { %>
+        <span>Next &raquo;</span>
+      <% } %>
+    </div>
+  </nav>
+</section>
+
+
+ 
+  <div id="addProductModal" class="modal"
+  style="display:none; position:fixed; top:0; left:0; width:100%;
+  height:100%; background:rgba(0,0,0,0.4); justify-content:center;
+  align-items:center; z-index:2000;">
+
+  <div class="bg-white p-4 rounded shadow"
+    style="width:90%; max-width:450px; position:relative;">
+
+    <button id="closeAddModal"
+      class="btn btn-danger"
+      style="position:absolute; top:10px; right:10px;">X</button>
+
+ 
+    <form method="POST" action="/admin/product/add">
+
+      <div class="mb-2">
+        <label>Product Name</label>
+        <input type="text" name="item_name" required
+          class="form-control">
+      </div>
+
+      <div class="d-flex gap-2 mb-2">
+        <div class="flex-fill">
+          <label>Quantity</label>
+          <input type="number" name="quantity" required
+            class="form-control">
+        </div>
+
+        <div class="flex-fill">
+          <label>Unit Price</label>
+          <input type="number" step="0.01" name="unit_price" required
+            class="form-control">
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label>Category</label>
+        <input type="text" name="category" required
+          class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>Status</label>
+        <select name="status" class="form-select">
+          <option value="in_stock">In Stock</option>
+          <option value="out_of_stock">Out of Stock</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">
+        Add Product
+      </button>
+
+    </form>
+
+  </div>
+</div>
+</main>
+
+
+ <script>
+  function toggleDetails(id) {
+    const el = document.getElementById('details-' + id);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  
+}
+ document.getElementById("openAddModal").onclick = () => {
+  document.getElementById("addProductModal").style.display = "flex";
+};
+
+ document.getElementById("closeAddModal").onclick = () => {
+  document.getElementById("addProductModal").style.display = "none";
+};
+
+ window.onclick = (e) => {
+  if (e.target === document.getElementById("addProductModal")) {
+    document.getElementById("addProductModal").style.display = "none";
+  }
+};
+
+</script>
+
+
+</body>
+</html>

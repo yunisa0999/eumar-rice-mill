@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eumar Rice Mill</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background-color: #F5F7F5;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #2E8B57;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding-top: 1rem;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+    }
+
+    .sidebar-logo img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: block;
+      box-shadow: 5px rgb(246,243,243);
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 1.3rem;
+      color: #A7C957;
+      margin-bottom: 1.5rem;
+      user-select: none;
+    }
+
+    .nav-link {
+      color: #FDFDFD;
+      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      transition: background-color 0.3s, padding-left 0.2s;
+      border-left: 4px solid transparent;
+    }
+
+    .nav-link:hover {
+      background-color: #3DAE72;
+      border-left: 4px solid #A7C957;
+      padding-left: 1.8rem;
+      text-decoration: none;
+    }
+
+    .nav-link.active {
+      background-color: #276749;
+      border-left: 4px solid #A7C957;
+    }
+
+    .nav-link svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.8rem;
+      fill: white;
+    }
+
+    
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    right: 0;
+    height: 60px;
+    background-color:  #2E8B57; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    z-index: 999;
+  }
+
+  .topbar a {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 0.95rem;
+  }
+
+  .topbar a:hover {
+    color: #3498db;
+  }
+
+  main {
+  margin-left: 250px;  
+  margin-top: 60px;     
+  padding: 1rem;       
+  padding-bottom: 80px; 
+  background-color: transparent;
+  min-height: calc(100vh - 60px);
+}
+
+@media (max-width: 768px) {
+  main {
+    margin-left: 70px;
+    margin-top: 60px;
+    padding: 1rem;
+    min-height: calc(100vh - 60px);
+  }
+}
+
+
+
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 70px;
+    }
+
+    .sidebar h2 {
+      display: none;
+    }
+
+    .nav-link {
+      justify-content: center; 
+      font-size: 0;
+    }
+
+    .nav-link svg {
+      margin: 0;
+    }
+
+    .nav-link span {
+      display: none;
+    }
+
+    .main-content {
+      margin-left: 70px;
+      width: calc(100vw - 70px);
+    }
+  }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #A7C957;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8CB944;
+    }
+
+  </style>
+</head>
+<body>
+
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="/ermlogo.png" alt="ERM Logo">
+    </div>
+    <h2>EUMAR</h2>
+    <a href="/admin" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z"/></svg>
+      Dashboard
+    </a>
+    <a href="/admin/sales" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M4 19h16v-2H4v2zm0-6h16v-2H4v2zm0-6v2h16V7H4z"/></svg>
+      Sales
+    </a>
+    <a href="/admin/queue" class="nav-link active">
+      <svg viewBox="0 0 24 24"><path d="M12 7V3L8 7h4zm0 2v7h-4l4 4 4-4h-4v-7z"/></svg>
+      Queue
+    </a>
+    <a href="/inventory" class="nav-link">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v2H4V4zm0 4h16v12H4V8zm3 2v8h2v-8H7zm4 0v8h2v-8h-2zm4 0v8h2v-8h-2z"/></svg>
+      Inventory
+    </a>
+     <a href="/user-management" class="nav-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span>Acitivity Logs</span>
+    </a>
+  <a href="/logout" class="nav-link mt-auto text-white">
+  <svg viewBox="0 0 24 24" fill="white">
+    <path d="M16 13v-2H7V8l-5 4 5 4v-3zM20 3h-8v2h8v14h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+  </svg>
+  Logout
+</a>
+  </aside>
+<main>
+  <div class="table-responsive" style="max-height: calc(100vh - 140px); overflow-y: auto; padding-bottom: 80px;">
+    <table class="table table-striped table-bordered table-sm align-middle" id="purchaseTable" style="font-size: 0.85rem;">
+  <thead class="table-dark">
+  <tr>
+    <th>Queue #</th>
+    <th>Customer</th>
+    <th>Contact</th>
+    <th>Service</th>
+    <th>Item Id</th>
+    <th>Qty</th>
+    <th>Weight (kg)</th>  
+    <th>Sale Product</th>
+    <th>Sale Qty</th>
+    <th>Total</th>
+    <th>Sale Status</th>
+    <th>Queue Status</th>
+    <th>Notes</th>
+    <th>Date</th>
+  </tr>
+</thead>
+<tbody id="tableBody">
+  <% if (purchases.length === 0) { %>
+    <tr>
+      <td colspan="14" class="text-center">No purchases found</td>
+    </tr>
+  <% } else { %>
+    <% purchases.forEach((p) => { %>
+      <tr class="table-row">
+        <td><%= p.queue_number %></td>
+        <td><%= p.customer_name %></td>
+        <td><%= p.contact_number || '-' %></td>
+        <td><%= p.service_type %></td>
+        <td><%= p.queue_product || '-' %></td>
+        <td><%= p.queue_quantity != null ? p.queue_quantity : '-' %></td>
+        <td><%= p.weight != null ? Number(p.weight).toFixed(2) : '-' %></td>  
+        <td><%= p.product_name || '-' %></td>
+        <td><%= p.sale_quantity != null ? p.sale_quantity : '-' %></td>
+        <td><%= p.total_amount != null ? Number(p.total_amount).toFixed(2) : '-' %></td>
+        <td><%= p.sale_status || '-' %></td>
+        <td><%= p.queue_status || '-' %></td>
+        <td><%= p.notes || '-' %></td>
+        <td><%= p.queue_created_at_formatted || '-' %></td>
+      </tr>
+    <% }) %>
+  <% } %>
+</tbody>
+
+  <nav style="position: fixed; bottom: 0; left: 250px; right: 0; height: 60px; display: flex; align-items: center; justify-content: center; z-index: 1000;">
+    <ul class="pagination mb-0" id="pagination"></ul>
+  </nav>
+
+  <script>
+    const rowsPerPage = 8;
+    const table = document.getElementById('purchaseTable');
+    const tbody = document.getElementById('tableBody');
+    const rows = Array.from(tbody.querySelectorAll('.table-row'));
+    const pagination = document.getElementById('pagination');
+    const pageCount = Math.ceil(rows.length / rowsPerPage);
+    let currentPage = 1;
+
+    function displayPage(page) {
+      if (page < 1) page = 1;
+      if (page > pageCount) page = pageCount;
+      currentPage = page;
+
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      
+      rows.forEach((row, index) => {
+        row.style.display = (index >= start && index < end) ? '' : 'none';
+      });
+
+      updatePaginationControls();
+    }
+
+    function updatePaginationControls() {
+      pagination.innerHTML = '';
+
+      const prevLi = document.createElement('li');
+      prevLi.classList.add('page-item');
+      if (currentPage === 1) prevLi.classList.add('disabled');
+      prevLi.innerHTML = `<a class="page-link" href="#">Previous</a>`;
+      prevLi.addEventListener('click', e => {
+        e.preventDefault();
+        if (currentPage > 1) displayPage(currentPage - 1);
+      });
+      pagination.appendChild(prevLi);
+
+      const currentLi = document.createElement('li');
+      currentLi.classList.add('page-item', 'active');
+      currentLi.innerHTML = `<a class="page-link" href="#">${currentPage}</a>`;
+      pagination.appendChild(currentLi);
+
+      const nextLi = document.createElement('li');
+      nextLi.classList.add('page-item');
+      if (currentPage === pageCount) nextLi.classList.add('disabled');
+      nextLi.innerHTML = `<a class="page-link" href="#">Next</a>`;
+      nextLi.addEventListener('click', e => {
+        e.preventDefault();
+        if (currentPage < pageCount) displayPage(currentPage + 1);
+      });
+      pagination.appendChild(nextLi);
+    }
+
+    if (rows.length > rowsPerPage) {
+      displayPage(1);
+    } else {
+      rows.forEach(row => row.style.display = '');
+      pagination.innerHTML = '';
+    }
+  </script>
+</main>
+</body>
+</html>
